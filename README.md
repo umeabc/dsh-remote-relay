@@ -68,7 +68,7 @@ systemctl restart dsh-remote-relay
 ## 配套
 
 - 手机端：[dsh-remote-android](https://github.com/umeabc/dsh-remote-android)
-- 桌面端：DSH 的 bridge 插件（把隧道流转发到 `127.0.0.1:8319`，并生成配对二维码）
+- 桌面端：[dsh-remote-plugin](https://github.com/umeabc/dsh-remote-plugin)（把隧道流转发到 `127.0.0.1:8319`，并生成配对二维码）
 
 ## License
 
