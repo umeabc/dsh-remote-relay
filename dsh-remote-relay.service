@@ -1,0 +1,25 @@
+# Example systemd unit. Copy to /etc/systemd/system/ and adjust the paths/port.
+[Unit]
+Description=DSH Remote Relay (zero-knowledge TCP rendezvous)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/node /opt/dsh-remote-relay/relay.js --port 9443 --host 0.0.0.0
+Restart=always
+RestartSec=3
+DynamicUser=yes
+NoNewPrivileges=true
+ProtectSystem=strict
+ProtectHome=true
+PrivateTmp=true
+PrivateDevices=true
+ProtectKernelTunables=true
+ProtectKernelModules=true
+ProtectControlGroups=true
+RestrictAddressFamilies=AF_INET AF_INET6 AF_UNIX
+LimitNOFILE=65536
+
+[Install]
+WantedBy=multi-user.target

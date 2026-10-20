@@ -1,0 +1,11 @@
+{
+  "name": "dsh-mobile-relay",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Zero-knowledge TCP relay for the DSH mobile bridge",
+  "main": "relay.js",
+  "bin": { "dsh-mobile-relay": "./relay.js" },
+  "engines": { "node": ">=20" },
+  "license": "MIT"
+}
