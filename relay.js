@@ -138,7 +138,14 @@ function attachHost(socket, reader, roomId, room) {
         const length = header.readUInt16BE(6);
         const payload = length === 0 ? null : await reader.read(length);
         const client = room.clients.get(channel);
-        if (client === undefined) continue;
+        if (client === undefined) {
+          // Host heartbeat (channel 0): echo it so the desktop can detect a
+          // dead link even when no phone is sending traffic.
+          if (header[5] === TYPE.PING && !socket.destroyed) {
+            await writeAll(socket, header).catch(() => {});
+          }
+          continue;
+        }
         await writeAll(client.socket, payload === null ? header : Buffer.concat([header, payload]));
       }
     } catch {
