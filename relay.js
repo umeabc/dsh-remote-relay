@@ -20,6 +20,7 @@ const FRAME_HEADER = 8;
 const MAX_FRAME = 65535;
 const MAX_HANDSHAKE = 4096;
 const MAX_CLIENTS = 16;
+const MAX_CLIENT_BUFFER = 4 * 1024 * 1024;
 
 const TYPE = {
   HELLO: 0,
@@ -146,7 +147,13 @@ function attachHost(socket, reader, roomId, room) {
           }
           continue;
         }
-        await writeAll(client.socket, payload === null ? header : Buffer.concat([header, payload]));
+        // Never await a client write here: one slow phone would otherwise
+        // stall the host's read loop and every other client behind it.
+        if (client.socket.writableLength > MAX_CLIENT_BUFFER) {
+          closeQuietly(client.socket);
+          continue;
+        }
+        client.socket.write(payload === null ? header : Buffer.concat([header, payload]));
       }
     } catch {
       /* connection ended */
