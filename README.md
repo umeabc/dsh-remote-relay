@@ -68,7 +68,16 @@ systemctl restart dsh-remote-relay
 ## 配套
 
 - 手机端：[dsh-remote-android](https://github.com/umeabc/dsh-remote-android)
-- 桌面端：[dsh-remote-plugin](https://github.com/umeabc/dsh-remote-plugin)（把隧道流转发到 `127.0.0.1:8319`，并生成配对二维码）
+- 桌面端：[dsh-remote-plugin](https://github.com/umeabc/dsh-remote-plugin)（把隧道流转发到本机 DSH 的回环端口，并生成配对二维码）
+
+## 与 DSH 版本的关系
+
+中转**不感知** DSH 版本：它只读 8 字节帧头、按 channel 转发，房间密钥从不经过它。所以桌面端升级
+（0.2.x 任意版本）都不需要动这里 —— 只需要确认插件侧 `FRAME` 常量、握手
+`{"v":1,"role","room","salt"}` 与 HKDF 标签（`dshm/c2h`、`dshm/h2c`）没变，那是本仓库与
+dsh-remote-plugin、dsh-remote-android 之间的契约。
+
+升级桌面端后建议跑一遍：`node ../dsh-remote-plugin/test/relay-e2e.mjs`。
 
 ## License
 
