@@ -1,6 +1,6 @@
 {
   "name": "dsh-mobile-relay",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "private": true,
   "type": "module",
   "description": "Zero-knowledge TCP relay for the DSH mobile bridge",

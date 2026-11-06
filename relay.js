@@ -227,7 +227,10 @@ async function handleConnection(socket) {
         closeQuietly(socket);
         return;
       }
-      await writeAll(socket, handshakeReply({ ok: true }));
+      // Tell the host its own public address so it can advertise it as a
+      // direct candidate once the router forwards the port.
+      const observed = String(socket.remoteAddress ?? '').replace(/^::ffff:/, '');
+      await writeAll(socket, handshakeReply({ ok: true, publicHost: observed }));
       attachHost(socket, reader, roomId, room);
       return;
     }

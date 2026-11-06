@@ -39,6 +39,8 @@ sudo systemctl enable --now dsh-remote-relay
 
 - 握手：`{"v":1,"role":"host","room":"<hex>"}` 或 `{"v":1,"role":"client","room":"<hex>","salt":"<base64>"}`。
 - 回执：`{"ok":true}` / `{"ok":true,"channel":N}` / `{"ok":false,"error":"host-offline"}`。
+- 桌面端登记成功时回执额外带 `publicHost`（中转观察到的来源地址）。桌面端用它作为直连候选对外播报 ——
+  手机经中转拿到房间信息后可以直接连到这台桌面，中转退出数据通路。
 - 帧类型：`0 HELLO`（中转→桌面，携带手机 salt）、`1 OPEN`、`2 DATA`、`3 FIN`、`4 RST`、`5 PING`、`6 CHANNEL_CLOSED`。
 - 手机发帧时 channel 填 0，中转改写成分配到的 channel；桌面按 channel 区分不同手机。
 - `DATA` 的 payload 是 AES-128-GCM 密文（含 16 字节 tag）。密钥 = HKDF-SHA256(房间密钥, salt, `dshm/c2h` / `dshm/h2c`)；
@@ -69,6 +71,11 @@ systemctl restart dsh-remote-relay
 
 - 手机端：[dsh-remote-android](https://github.com/umeabc/dsh-remote-android)
 - 桌面端：[dsh-remote-plugin](https://github.com/umeabc/dsh-remote-plugin)（把隧道流转发到本机 DSH 的回环端口，并生成配对二维码）
+
+## 部署说明
+
+具体的服务器地址、系统版本与运维细节不写进本仓库（公开仓库不放生产环境信息）。
+部署时只需记：`node relay.js --port <端口> --host 0.0.0.0`，系统组放行同一端口即可。
 
 ## 与 DSH 版本的关系
 
