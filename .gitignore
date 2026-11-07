@@ -1,2 +1,6 @@
 node_modules/
 *.log
+
+# 私有部署笔记（地址/口令），永不入库
+local-notes/
+.local-notes/
